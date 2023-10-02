@@ -19,6 +19,9 @@ class Combination(object):
         self.n=len(nums)
 
     def backtrack(self,i):
+        if len(self.res)>150:
+            raise IndexError
+
         # 停止条件
         if sum(self.ans) == self.target:
             self.res.append(self.ans[:])
@@ -39,7 +42,7 @@ class Combination(object):
 
 
 if __name__ == '__main__':
-    nums=[2,3,6,7,1,4]
-    target=7
+    nums=[i for i in range(1,5)]
+    target=15
     test=Combination(nums=nums,target=target)
     print(test.backtrack(0))
