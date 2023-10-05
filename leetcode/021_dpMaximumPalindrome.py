@@ -42,7 +42,21 @@ def dp_maximum(s:str):
             m=max(m,len(dp[i][j]))
     return dp,m
 
+def force(s:str):
+    res = ''
+    for i in range(len(s)):
+        start = max(i - len(res) - 1, 0)
+        temp = s[start: i + 1]
+        if temp == temp[::-1]:
+            res = temp
+        else:
+            temp = temp[1:]
+            if temp == temp[::-1]:
+                res = temp
+    return res,len(res)
+
 
 if __name__ == '__main__':
     s = "babaddddd"
-    print(dp_maximum(s))
+    # print(dp_maximum(s))
+    print(force(s))
