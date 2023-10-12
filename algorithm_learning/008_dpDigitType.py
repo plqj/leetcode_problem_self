@@ -1,7 +1,7 @@
 # 给定一个整数 n，计算所有小于等于 n 的非负整数中数字 1 出现的个数。
 from functools import cache
 
-def count(n:int) ->int:
+def count1(n:int) ->int:
     # 将n转化为字符串
     s=str(n)
 
@@ -30,13 +30,14 @@ def count(n:int) ->int:
 
 if __name__ == '__main__':
     n=13
-    print(count(n))
+    print(count1(n))
     # 以数字13为例，首先调用了
     # f(i=0,cnt1=0,isLimit=True) # 初始化了这一层的res_0=0 计算发现up_0要等于1，也就是说，第一位是受到限制的，只能取0和1，将0和1循环赋值给d_0，对于0而言，调用
     #   # f(i=1,cnt1=0,isLimit=False) # 考虑到数字d_0此时为零,cnt1_1=0，不等于up_0，也就是说这一位随便取。初始化res_10=0，up_10=9，数字d_1的取值可以从0到9循环填入，调用
     #   #   # f(i=2,cnt1=0,isLimit=False) # d_1此时为零，cnt1_2仍是零，isLimit此时不重要，发现符合if内条件，直接return cnt1_2的值0，加等到res_10上
     #   #   # f(i=2,cnt1=1,isLimit=False) # d_1此时为1，cnt1_2为1，isLimit此时不重要，发现符合if内条件，直接return cnt1_2的值1，加等到res_10上
     #   #   # f(i=2,cnt1=0,isLimit=False) # d_1此时为2，cnt1_2仍是零，isLimit此时不重要，发现符合if内条件，直接return cnt1_2的值0，加等到res_10上
+    #   #   #   # 能发现，d_1为零和2的时候传入的参数是一样的，所以用装饰器@cache可以直接得到cnt1_2的值为0，直接return出来就好，不用重复调用计算，以空间换时间。
     #   #   # 以此类推，直到d_1循环完，res_10为1，return res_10加等到res_0上，f(i=1,cnt1=0,isLimit=False)执行完毕
     #   # f(i=1,cnt1=1,isLimit=True) # 考虑到数字d_0此时为1，cnt1_1=1(因为d==1)，d_0==1与up_0相等，也就是这一位是受限制的，初始化res_11=0,up_11=3,d_1只能取到[0,3]闭区间,调用
     #   #   # f(i=2,cnt1=1,isLimit=False) # d_1此时为零，cnt1_2=1(因为d==0)，isLimit此时不重要，发现符合if内条件，直接return cnt1_2值为1，加等到res_11上
