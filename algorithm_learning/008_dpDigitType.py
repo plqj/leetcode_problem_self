@@ -7,7 +7,7 @@ def count1(n:int) ->int:
     # 将n转化为字符串
     s=str(n)
 
-    @cache
+    @cache # 很必要，不然递归太多会超时
     def f(i,cnt1,isLimit:bool):
         """
         :param i:表示构造到从左往右第i位
