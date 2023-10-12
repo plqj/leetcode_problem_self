@@ -1,4 +1,6 @@
 # 给定一个整数 n，计算所有小于等于 n 的非负整数中数字 1 出现的个数。
+# 如果计算0出现的次数呢？
+
 from functools import cache
 
 def count1(n:int) ->int:
@@ -28,8 +30,38 @@ def count1(n:int) ->int:
     return f(0, 0, True)
 
 
+def count0(n:int) ->int:
+    # 将n转化为字符串
+    s=str(n)
+
+    @cache
+    def f(i,cnt1,isLimit:bool,isNum:bool):
+        """
+        :param i:表示构造到从左往右第i位
+        :param cnt1: 在第i位时已经出现的‘1’的个数 最终要输出的结果
+        :param isLimit: 表示当前是否受到了n的约束。若为真，则第i位最多填到s[i]，否则可以到9。如果在受到约束的情况下填的s[i]，后续也要受约束
+        :param isNum:表示i前面的数位是否填了数字，若为假，则当前位可以跳过，或者至少要从1开始填，若为真，则要填入的数字可以从0开始
+        :return:
+        """
+        # 后面两个参数可适用于其它数位 DP 题目
+
+        if i == len(s):
+            return cnt1 # 如果已经迭代到了最后一位，则直接打印结果
+        res = 0
+
+        if not isNum:
+            res+=f(i+1,cnt1,False,False)
+
+        up = int(s[i]) if isLimit else 9
+        for d in range(1-int(isNum),up + 1):  # 枚举要填入的数字 d，这里要分类讨论，如果前面没构成数字，则要用1开始试验，若已经构成了，则从零开始
+            res += f(i + 1, cnt1 + (d == 0), isLimit and d == up,True)
+        return res
+
+    return f(0, 0, True,False)
+
+
 if __name__ == '__main__':
-    n=13
+    n=25
     print(count1(n))
     # 以数字13为例，首先调用了
     # f(i=0,cnt1=0,isLimit=True) # 初始化了这一层的res_0=0 计算发现up_0要等于1，也就是说，第一位是受到限制的，只能取0和1，将0和1循环赋值给d_0，对于0而言，调用
@@ -47,6 +79,7 @@ if __name__ == '__main__':
     #   #   # 循环完发现res_11等于5，return res_11加等到res_0上，f(i=1,cnt1=1,isLimit=True)执行完毕
     #   # 最开始的f(i=0,cnt1=0,isLimit=True)执行完毕，res_0 == res_10+res_11 == 6，输出res
 
+    print(count0(n))
 
 
 
