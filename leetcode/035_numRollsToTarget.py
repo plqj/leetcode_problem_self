@@ -26,8 +26,23 @@ def numRollsToTarget(n:int,k:int,target:int)->int:
     return f(0,0)
 
 
+
 if __name__ == '__main__':
-    n=30
-    k=30
-    target=500
+    n=3
+    k=6
+    target=10
     print(numRollsToTarget(n,k,target))
+    denominator = numerator = 1
+    MOD = 10 ** 9 + 7
+    if n * k < target or n > target:
+        print(0)
+    else:
+        for i in range(1, n):
+            denominator *= i
+        a = min(target - n, n * k - target) + 1
+        for j in range(a, a + n - 1):
+            numerator *= j
+        ans = int(numerator / denominator)
+        if ans > MOD:
+            ans = ans % MOD
+        print(ans)
